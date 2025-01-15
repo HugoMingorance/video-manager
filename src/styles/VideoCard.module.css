@@ -1,0 +1,30 @@
+.videoCard {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 16px rgba(255, 255, 255, 1); 
+    margin-bottom: 20px;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .videoCard:hover {
+    transform: translateY(-5px);
+  }
+  
+  .videoCard h3 {
+    margin: 0 0 10px;
+  }
+  
+  .videoCard p {
+    margin: 0 0 10px;
+    color: #555;
+  }
+  
+  .videoCard iframe {
+    margin-top: 20px;
+  }

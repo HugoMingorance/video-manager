@@ -1,0 +1,43 @@
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 60px;
+    background-color: #000000;
+    color: white;
+    box-shadow: 0 4px 16px rgba(255, 255, 255, 1); 
+}
+
+.headerLeft h1 {
+    margin: 0;
+}
+
+.headerLeft .lister {
+    color:rgb(255, 0, 0);
+}
+
+.headerRight {
+    display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	justify-content: space-evenly;
+	align-items: baseline;
+	align-content: center;
+    gap: 50px;
+}
+
+.headerButton {
+    padding: 5px 30px;
+    background-color: #ffffff;
+    color: rgb(0, 0, 0);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.headerButton:hover {
+    background-color: #ff0000;
+    color: rgb(0, 0, 0);
+    box-shadow: 0 2px 8px rgb(255, 0, 0); 
+}
