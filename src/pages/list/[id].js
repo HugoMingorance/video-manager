@@ -4,6 +4,7 @@ import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '../../FirebaseConfig';
 import Header from '../../components/Header';
 import VideoCard from '../../components/videoCard';
+import styles from '../../styles/ListDetails.module.css'; // Importa el CSS para la página de detalles
 
 const ListDetails = () => {
   const router = useRouter();
@@ -32,10 +33,10 @@ const ListDetails = () => {
   return (
     <div>
       <Header />
-      <div className="list-details">
+      <div className={styles.listDetails}>
         <h2>Videos de la Lista</h2> {/* Título de sección */}
         {error && <p style={{ color: 'red' }}>Error: {error}</p>}
-        <div className="videos-container">
+        <div className={styles.videosContainer}>
           {videos.map(video => (
             <VideoCard
               key={video.id}

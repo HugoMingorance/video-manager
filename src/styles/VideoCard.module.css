@@ -2,14 +2,15 @@
     background-color: white;
     padding: 20px;
     border-radius: 8px;
-    box-shadow: 0 4px 16px rgba(255, 255, 255, 1); 
-    margin-bottom: 20px;
-    cursor: pointer;
-    transition: transform 0.2s ease;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1); 
+    width: 700px; /* Fijar el ancho de las tarjetas */
+    text-align: center;
+    transition: transform 0.2s;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    margin: 20px auto; /* Centrar horizontalmente y agregar margen vertical */
   }
   
   .videoCard:hover {
@@ -26,5 +27,5 @@
   }
   
   .videoCard iframe {
-    margin-top: 20px;
+    margin: 20px 0; /* Agregar margen superior e inferior al iframe */
   }
