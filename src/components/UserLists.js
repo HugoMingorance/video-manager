@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { collection, doc, getDoc, getDocs, query, where } from 'firebase/firestore';
 import { db } from '../FirebaseConfig';
+import ListCard from './ListCard';
 
 const UserLists = ({ userId }) => {
   const [lists, setLists] = useState([]);
@@ -41,14 +42,14 @@ const UserLists = ({ userId }) => {
   }, [userId]);
 
   return (
-    <div>
+    <div className="user-lists">
       <h2>Mis Listas</h2>
       {error && <p style={{ color: 'red' }}>Error: {error}</p>}
-      <ul>
+      <div className="lists-container">
         {lists.map(list => (
-          <li key={list.id}>{list.name}</li>
+          <ListCard key={list.id} name={list.name} description={list.description} />
         ))}
-      </ul>
+      </div>
     </div>
   );
 };
