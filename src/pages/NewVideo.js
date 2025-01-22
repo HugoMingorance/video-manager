@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { collection, doc, getDoc, getDocs, query, where, addDoc } from 'firebase/firestore'; // Asegúrate de importar addDoc aquí
+import { collection, doc, getDoc, getDocs, query, where, addDoc, updateDoc, arrayUnion } from 'firebase/firestore';
 import { db } from '../FirebaseConfig';
 import nVStyles from '../styles/NewVideo.module.css';
-import styles from '../styles/Header.module.css'; 
+import styles from '../styles/Header.module.css';
 import Header from '../components/Header';
 
 const NewVideo = () => {
@@ -61,6 +61,7 @@ const NewVideo = () => {
     }
 
     let listId = selectedList;
+    let newVideoId;
 
     if (isCreatingNewList) {
       if (!newListName) {
@@ -69,12 +70,23 @@ const NewVideo = () => {
       }
 
       try {
-        const docRef = await addDoc(collection(db, 'lists'), {
+        const createdAt = new Date().toISOString();
+        const newList = {
           name: newListName,
           description: newListDescription,
-          userId: userId, // Asigna el userId a la nueva lista
-        });
+          createdAt,
+          videoIds: [],
+          userId
+        };
+        
+        const docRef = await addDoc(collection(db, 'lists'), newList);
         listId = docRef.id;
+
+        // Actualizar el documento del usuario para incluir la nueva lista
+        const userDocRef = doc(db, 'llistesPerUusuari', userId);
+        await updateDoc(userDocRef, {
+          llistesIds: arrayUnion(listId)
+        });
       } catch (error) {
         console.error('Error creating new list: ', error);
         alert('Hubo un problema al crear la nueva lista.');
@@ -88,11 +100,19 @@ const NewVideo = () => {
       url,
       description,
       lists: [listId],
-      createdAt: new Date().toISOString().split('T')[0],
+      createdAt: new Date().toISOString()
     };
 
     try {
-      await addDoc(collection(db, 'videos'), videoData);
+      const videoDocRef = await addDoc(collection(db, 'videos'), videoData);
+      newVideoId = videoDocRef.id;
+
+      // Actualizar la lista con el nuevo video
+      const listDocRef = doc(db, 'lists', listId);
+      await updateDoc(listDocRef, {
+        videoIds: arrayUnion(newVideoId)
+      });
+
       alert('Video agregado correctamente.');
       // Limpiar los campos
       setTitle('');

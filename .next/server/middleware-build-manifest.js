@@ -25,6 +25,11 @@ self.__BUILD_MANIFEST = {
       "static/chunks/main.js",
       "static/chunks/pages/home.js"
     ],
+    "/list/[id]": [
+      "static/chunks/webpack.js",
+      "static/chunks/main.js",
+      "static/chunks/pages/list/[id].js"
+    ],
     "/newVideo": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
