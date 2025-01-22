@@ -6,6 +6,7 @@ const Header = ({ userId }) => {
   const router = useRouter();
 
   const handleNewClick = () => {
+    console.log('Navigating to newVideo page'); // Añadir un log para verificar que la función se llama
     router.push(`/newVideo?userId=${userId}`);
   };
 

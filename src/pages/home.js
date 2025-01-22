@@ -8,7 +8,7 @@ export default function Home() {
 
   return (
     <div>
-     <Header />
+      <Header userId={user && user.uid} />
       {user ? (
         <UserLists userId={user.uid} />
       ) : (

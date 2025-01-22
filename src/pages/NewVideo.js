@@ -90,7 +90,7 @@ const NewVideo = () => {
 
   return (
     <>
-      <Header />
+      <Header userId={router.query.userId} />
       <div className={nVStyles.container}>
         <h1>Agregar Nuevo Video</h1>
         <div className={nVStyles.form}>
