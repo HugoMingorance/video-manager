@@ -8,7 +8,7 @@ import styles from '../../styles/ListDetails.module.css'; // Importa el CSS para
 
 const ListDetails = () => {
   const router = useRouter();
-  const { id } = router.query;
+  const { id, userId } = router.query;
   const [videos, setVideos] = useState([]);
   const [error, setError] = useState(null);
 
@@ -32,7 +32,7 @@ const ListDetails = () => {
 
   return (
     <div>
-      <Header />
+      <Header userId={userId} />
       <div className={styles.listDetails}>
         <h2>Videos de la Lista</h2> {/* Título de sección */}
         {error && <p style={{ color: 'red' }}>Error: {error}</p>}

@@ -1,11 +1,15 @@
 import React from 'react';
 import { useRouter } from 'next/router';
 
-const ListCard = ({ id, name, description }) => {
+const ListCard = ({ id, name, description, userId }) => {
   const router = useRouter();
 
   const handleClick = () => {
-    router.push(`/list/${id}`);
+    if (!userId) {
+      console.error('User ID is undefined');
+      return;
+    }
+    router.push(`/list/${id}?userId=${userId}`);
   };
 
   return (

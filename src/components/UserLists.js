@@ -1,4 +1,3 @@
-// components/UserLists.js
 import { useEffect, useState } from 'react';
 import { collection, doc, getDoc, getDocs, query, where } from 'firebase/firestore';
 import { db } from '../FirebaseConfig';
@@ -45,7 +44,7 @@ const UserLists = ({ userId }) => {
       {error && <p style={{ color: 'red' }}>Error: {error}</p>}
       <div className="lists-container">
         {lists.map(list => (
-          <ListCard key={list.id} id={list.id} name={list.name} description={list.description} />
+          <ListCard key={list.id} id={list.id} name={list.name} description={list.description} userId={userId} />
         ))}
       </div>
     </div>
