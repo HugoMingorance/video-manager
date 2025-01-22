@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
+import { getAuth, setPersistence, browserLocalPersistence } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 import { getAnalytics, isSupported } from "firebase/analytics";
 
@@ -27,5 +27,11 @@ if (typeof window !== "undefined") {
 }
 const auth = getAuth(app);
 const db = getFirestore(app);
+
+// Configura la persistencia de la sesión
+setPersistence(auth, browserLocalPersistence)
+  .catch(error => {
+    console.error('Error setting persistence:', error);
+  });
 
 export { auth, db, analytics };

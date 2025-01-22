@@ -1,10 +1,10 @@
-import { useState } from 'react';
-import Login from '../components/Login';
+import { useAuth } from '../context/AuthContext';
 import UserLists from '../components/UserLists';
 import Header from '../components/Header';
+import Login from '../components/Login';
 
 export default function Home() {
-  const [user, setUser] = useState(null);
+  const { user } = useAuth();
 
   return (
     <div>
@@ -12,7 +12,7 @@ export default function Home() {
       {user ? (
         <UserLists userId={user.uid} />
       ) : (
-        <Login onLogin={setUser} />
+        <Login />
       )}
     </div>
   );

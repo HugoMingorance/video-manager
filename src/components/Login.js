@@ -1,17 +1,19 @@
 import { useState } from 'react';
+import { useRouter } from 'next/router';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../FirebaseConfig';
 
-const Login = ({ onLogin }) => {
+const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const router = useRouter();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      onLogin(userCredential.user);
+      router.push('/home'); // Redirigir a la página de inicio después de iniciar sesión
     } catch (error) {
       setError(error.message);
     }

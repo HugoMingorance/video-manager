@@ -10,6 +10,11 @@ const Header = ({ userId }) => {
     router.push(`/newVideo?userId=${userId}`);
   };
 
+  const handleProfileClick = () => {
+    console.log('Navigating to profile page'); // Añadir un log para verificar que la función se llama
+    router.push('/profile');
+  };
+
   return (
     <header className={styles.header}>
       <div className={styles.headerLeft}>
@@ -18,7 +23,7 @@ const Header = ({ userId }) => {
       <div className={styles.headerRight}>
         <button className={styles.headerButton} onClick={handleNewClick}>Nuevo</button>
         <button className={styles.headerButton}>Favoritos</button>
-        <button className={styles.headerButton}>Perfil</button>
+        <button className={styles.headerButton} onClick={handleProfileClick}>Perfil</button>
       </div>
     </header>
   );
