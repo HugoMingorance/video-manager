@@ -2,7 +2,7 @@
   "/_app": "pages/_app.js",
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
-  "/home": "pages/home.js",
   "/list/[id]": "pages/list/[id].js",
+  "/home": "pages/home.js",
   "/newVideo": "pages/newVideo.js"
 }

@@ -1,3 +1,4 @@
+// components/UserLists.js
 import { useEffect, useState } from 'react';
 import { collection, doc, getDoc, getDocs, query, where } from 'firebase/firestore';
 import { db } from '../FirebaseConfig';
@@ -10,15 +11,12 @@ const UserLists = ({ userId }) => {
   useEffect(() => {
     const fetchLists = async () => {
       try {
-        // Obtener el documento del usuario en 'llistesPerUusuari'
         const userDocRef = doc(db, 'llistesPerUusuari', userId);
         const userDocSnap = await getDoc(userDocRef);
 
         if (userDocSnap.exists()) {
-          // Obtener los IDs de las listas del campo 'llistesIds'
           const { llistesIds } = userDocSnap.data();
           if (llistesIds && llistesIds.length > 0) {
-            // Obtener los detalles de las listas usando los IDs de 'llistesIds'
             const listsQuery = query(collection(db, 'lists'), where('__name__', 'in', llistesIds));
             const listsQuerySnapshot = await getDocs(listsQuery);
             const listsData = listsQuerySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));

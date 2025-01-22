@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { collection, addDoc, getDocs } from 'firebase/firestore';
+import { collection, doc, getDoc, getDocs, query, where, addDoc } from 'firebase/firestore'; // Asegúrate de importar addDoc aquí
 import { db } from '../FirebaseConfig';
 import nVStyles from '../styles/NewVideo.module.css';
 import styles from '../styles/Header.module.css'; 
@@ -16,21 +16,43 @@ const NewVideo = () => {
   const [newListName, setNewListName] = useState('');
   const [newListDescription, setNewListDescription] = useState('');
   const [isCreatingNewList, setIsCreatingNewList] = useState(false);
+  const [error, setError] = useState(null);
   const router = useRouter();
+  const userId = router.query.userId;
 
   useEffect(() => {
-    const loadUserLists = async () => {
+    const fetchLists = async () => {
       try {
-        const querySnapshot = await getDocs(collection(db, 'lists'));
-        const lists = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        setAllLists(lists);
+        // Obtener el documento del usuario en 'llistesPerUusuari'
+        const userDocRef = doc(db, 'llistesPerUusuari', userId);
+        const userDocSnap = await getDoc(userDocRef);
+
+        if (userDocSnap.exists()) {
+          // Obtener los IDs de las listas del campo 'llistesIds'
+          const { llistesIds } = userDocSnap.data();
+          if (llistesIds && llistesIds.length > 0) {
+            // Obtener los detalles de las listas usando los IDs de 'llistesIds'
+            const listsQuery = query(collection(db, 'lists'), where('__name__', 'in', llistesIds));
+            const listsQuerySnapshot = await getDocs(listsQuery);
+            const listsData = listsQuerySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            setAllLists(listsData);
+          } else {
+            setAllLists([]);
+          }
+        } else {
+          console.log('No such document!');
+          setAllLists([]);
+        }
       } catch (error) {
-        console.error('Error fetching user lists: ', error);
+        console.error('Error fetching lists: ', error);
+        setError(error.message);
       }
     };
 
-    loadUserLists();
-  }, []);
+    if (userId) {
+      fetchLists();
+    }
+  }, [userId]);
 
   const handleAddVideo = async () => {
     if (!title || !type || !url || (!selectedList && !isCreatingNewList)) {
@@ -50,6 +72,7 @@ const NewVideo = () => {
         const docRef = await addDoc(collection(db, 'lists'), {
           name: newListName,
           description: newListDescription,
+          userId: userId, // Asigna el userId a la nueva lista
         });
         listId = docRef.id;
       } catch (error) {
@@ -90,9 +113,10 @@ const NewVideo = () => {
 
   return (
     <>
-      <Header userId={router.query.userId} />
+      <Header userId={userId} />
       <div className={nVStyles.container}>
         <h1>Agregar Nuevo Video</h1>
+        {error && <p style={{ color: 'red' }}>Error: {error}</p>}
         <div className={nVStyles.form}>
           <input
             type="text"
