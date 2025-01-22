@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styles from '../styles/VideoCard.module.css'; // Importa el módulo CSS
 
 const VideoCard = ({ title, description, createdAt, videoUrl }) => {
+  const [showVideo, setShowVideo] = useState(false); // Estado para controlar la visibilidad del video
+
   // Extraer el ID del video de la URL
   const extractVideoId = (url) => {
     try {
@@ -29,11 +31,16 @@ const VideoCard = ({ title, description, createdAt, videoUrl }) => {
 
   const videoId = extractVideoId(videoUrl);
 
+  // Manejador de clic para mostrar/ocultar el video
+  const handleClick = () => {
+    setShowVideo(!showVideo);
+  };
+
   return (
-    <div className={styles.videoCard}>
+    <div className={styles.videoCard} onClick={handleClick}>
       <h3>{title}</h3>
       <p>{description}</p>
-      {videoId ? (
+      {showVideo && videoId && (
         <iframe
           width="560"
           height="315"
@@ -43,8 +50,6 @@ const VideoCard = ({ title, description, createdAt, videoUrl }) => {
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowFullScreen
         ></iframe>
-      ) : (
-        <p>Error al cargar el video</p>
       )}
       <p><small>Creado el: {new Date(createdAt).toLocaleDateString()}</small></p>
     </div>
