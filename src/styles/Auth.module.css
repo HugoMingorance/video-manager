@@ -1,0 +1,75 @@
+.authContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start; /* Alinear al principio del contenedor */
+    min-height: 100vh;
+    background-color: #000000; /* Fondo negro */
+    color: #ffffff; /* Texto blanco */
+}
+
+.authHeader {
+    text-align: center;
+    margin-bottom: 10px; /* Reducir el margen inferior */
+    color: #ffffff; /* Asegurarse de que el texto del header sea blanco */
+}
+
+.buttonContainer {
+    margin-bottom: 10px; /* Reducir el margen inferior */
+}
+
+.authBox {
+    background: #000000; /* Fondo negro */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 16px rgba(255, 255, 255, 1); /* Sombra blanca */
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+    color: #ffffff; /* Asegurarse de que el texto dentro de la tarjeta sea blanco */
+}
+
+.authForm {
+    display: flex;
+    flex-direction: column;
+}
+
+.authForm input {
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #000000; /* Fondo negro */
+    color: #ffffff; /* Texto blanco */
+}
+
+.authForm input::placeholder {
+    color: #888888; /* Color del placeholder para que sea visible en el fondo negro */
+}
+
+.authForm button {
+    padding: 10px;
+    background-color: #ff0000; /* Botón rojo */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.authForm button:hover {
+    background-color: #cc0000; /* Botón rojo más oscuro al pasar el mouse */
+}
+
+.backButton {
+    padding: 10px;
+    background-color: #ff0000; /* Botón rojo */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-bottom: 30px;
+}
+
+.backButton:hover {
+    background-color: #cc0000; /* Botón rojo más oscuro al pasar el mouse */
+}
