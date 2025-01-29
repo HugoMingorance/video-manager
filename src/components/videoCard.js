@@ -107,6 +107,7 @@ const VideoCard = ({ videoIdFb, title, description, createdAt, videoUrl }) => {
       const videoDocRef = doc(db, 'videos', videoIdFb);
       await deleteDoc(videoDocRef);
       alert('El video ha sido eliminado exitosamente.');
+      window.location.reload(); // Recargar la página después de eliminar el video
     } catch (error) {
       console.error('Error eliminando el video: ', error);
       alert('Hubo un error al intentar eliminar el video.');

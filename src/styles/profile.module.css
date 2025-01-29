@@ -1,0 +1,31 @@
+/* Profile.module.css */
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background-color: #000; /* Fondo negro */
+    color: white; /* Color del texto */
+    padding: 20px;
+  }
+  
+  .title {
+    margin-bottom: 20px; /* Espacio debajo del título */
+    color: white; /* Color del texto */
+  }
+  
+  .button {
+    padding: 10px 20px;
+    background-color: #ffffff; /* Botón blanco */
+    color: #000; /* Texto negro */
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s;
+  }
+  
+  .button:hover {
+    background-color: #ff0000; /* Fondo rojo al pasar el cursor */
+    color: white; /* Texto blanco al pasar el cursor */
+  }
