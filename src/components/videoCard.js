@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { doc, updateDoc, arrayUnion, arrayRemove, getDoc } from 'firebase/firestore';
+import { doc, updateDoc, arrayUnion, arrayRemove, getDoc, deleteDoc } from 'firebase/firestore';
 import { db } from '../FirebaseConfig';
 import styles from '../styles/VideoCard.module.css'; // Importa el módulo CSS
 
@@ -15,7 +15,7 @@ const VideoCard = ({ videoIdFb, title, description, createdAt, videoUrl }) => {
       console.log("Video URL:", url); // Debug: Mostrar la URL del video
       const urlObj = new URL(url);
       console.log("URL Object:", urlObj); // Debug: Mostrar el objeto URL
-      
+
       let videoId = null;
       if (urlObj.host === 'youtu.be') {
         // URL corta de YouTube
@@ -25,7 +25,7 @@ const VideoCard = ({ videoIdFb, title, description, createdAt, videoUrl }) => {
         const urlParams = new URLSearchParams(urlObj.search);
         videoId = urlParams.get('v');
       }
-      
+
       console.log("Video ID:", videoId); // Debug: Mostrar el ID del video
       return videoId;
     } catch (error) {
@@ -65,7 +65,7 @@ const VideoCard = ({ videoIdFb, title, description, createdAt, videoUrl }) => {
     }
 
     if (!videoIdFb) {
-      console.error('Video ID from Firebase is null.');
+      console.error('Video ID from Firebase es null.');
       return;
     }
 
@@ -83,6 +83,33 @@ const VideoCard = ({ videoIdFb, title, description, createdAt, videoUrl }) => {
       setIsFavorite(!isFavorite);
     } catch (error) {
       console.error('Error updating favorite videos: ', error);
+    }
+  };
+
+  // Manejador de clic para el botón de eliminar
+  const handleDeleteClick = async () => {
+    if (!user) {
+      alert('Por favor, inicia sesión para eliminar videos.');
+      return;
+    }
+
+    if (!videoIdFb) {
+      console.error('Video ID from Firebase es null.');
+      return;
+    }
+
+    const confirmDelete = window.confirm('¿Estás seguro de que deseas eliminar este video?');
+    if (!confirmDelete) {
+      return;
+    }
+
+    try {
+      const videoDocRef = doc(db, 'videos', videoIdFb);
+      await deleteDoc(videoDocRef);
+      alert('El video ha sido eliminado exitosamente.');
+    } catch (error) {
+      console.error('Error eliminando el video: ', error);
+      alert('Hubo un error al intentar eliminar el video.');
     }
   };
 
@@ -111,6 +138,15 @@ const VideoCard = ({ videoIdFb, title, description, createdAt, videoUrl }) => {
           }}
         >
           {isFavorite ? '❤️' : '🤍'}
+        </button>
+        <button 
+          className={styles.deleteButton} 
+          onClick={(e) => {
+            e.stopPropagation(); // Evitar que el clic en el botón de eliminar muestre/oculte el video
+            handleDeleteClick();
+          }}
+        >
+          🗑️
         </button>
       </div>
     </div>
