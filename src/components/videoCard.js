@@ -4,7 +4,7 @@ import { doc, updateDoc, arrayUnion, arrayRemove, getDoc } from 'firebase/firest
 import { db } from '../FirebaseConfig';
 import styles from '../styles/VideoCard.module.css'; // Importa el módulo CSS
 
-const VideoCard = ({ title, description, createdAt, videoUrl }) => {
+const VideoCard = ({ videoIdFb, title, description, createdAt, videoUrl }) => {
   const [showVideo, setShowVideo] = useState(false); // Estado para controlar la visibilidad del video
   const [isFavorite, setIsFavorite] = useState(false); // Estado para controlar si el video es favorito
   const { user } = useAuth(); // Obtener el usuario autenticado
@@ -39,18 +39,18 @@ const VideoCard = ({ title, description, createdAt, videoUrl }) => {
   // Verificar si el video es favorito cuando el componente se monta
   useEffect(() => {
     const checkIfFavorite = async () => {
-      if (user) {
+      if (user && videoIdFb) {
         const userDocRef = doc(db, 'favorits', user.uid);
         const userDocSnap = await getDoc(userDocRef);
         if (userDocSnap.exists()) {
           const { videoIds } = userDocSnap.data();
-          setIsFavorite(videoIds.includes(videoId));
+          setIsFavorite(videoIds.includes(videoIdFb));
         }
       }
     };
 
     checkIfFavorite();
-  }, [user, videoId]);
+  }, [user, videoIdFb]);
 
   // Manejador de clic para mostrar/ocultar el video
   const handleClick = () => {
@@ -64,15 +64,20 @@ const VideoCard = ({ title, description, createdAt, videoUrl }) => {
       return;
     }
 
+    if (!videoIdFb) {
+      console.error('Video ID from Firebase is null.');
+      return;
+    }
+
     try {
       const userDocRef = doc(db, 'favorits', user.uid);
       if (isFavorite) {
         await updateDoc(userDocRef, {
-          videoIds: arrayRemove(videoId)
+          videoIds: arrayRemove(videoIdFb)
         });
       } else {
         await updateDoc(userDocRef, {
-          videoIds: arrayUnion(videoId)
+          videoIds: arrayUnion(videoIdFb)
         });
       }
       setIsFavorite(!isFavorite);
