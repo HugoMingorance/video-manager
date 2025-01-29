@@ -2,8 +2,8 @@
   "/_app": "pages/_app.js",
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
-  "/login": "pages/login.js",
-  "/register": "pages/register.js",
+  "/profile": "pages/profile.js",
   "/list/[id]": "pages/list/[id].js",
-  "/profile": "pages/profile.js"
+  "/newVideo": "pages/newVideo.js",
+  "/favorites": "pages/favorites.js"
 }

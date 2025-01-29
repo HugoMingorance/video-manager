@@ -10,3 +10,21 @@
     flex-direction: column;
     align-items: center;
   }
+
+/* Estilos para pantallas móviles */
+@media (max-width: 768px) {
+  .listDetails {
+      padding: 10px; /* Ajustar el padding para pantallas más pequeñas */
+      width: 100%; /* Asegurar que ocupe todo el ancho disponible */
+      box-sizing: border-box; /* Incluir padding y border en el ancho total */
+      align-items: center; /* Centrar los elementos */
+      text-align: center; /* Centrar el texto */
+  }
+
+  .videosContainer {
+      width: 100%; /* Asegurar que ocupe todo el ancho disponible */
+      box-sizing: border-box; /* Incluir padding y border en el ancho total */
+      align-items: center; /* Centrar los elementos */
+      text-align: center; /* Centrar el texto */
+  }
+}

@@ -29,3 +29,25 @@
   .videoCard iframe {
     margin: 20px 0; /* Agregar margen superior e inferior al iframe */
   }
+
+  /* Estilos para pantallas móviles */
+@media (max-width: 768px) {
+  .videoCard {
+      width: 90%; /* Ajustar el ancho para dispositivos móviles */
+      padding: 15px; /* Ajustar el padding para dispositivos móviles */
+      margin: 10px auto; /* Reducir el margen vertical */
+  }
+  
+  .videoCard h3 {
+      font-size: 1.2em; /* Ajustar el tamaño de la fuente */
+  }
+  
+  .videoCard p {
+      font-size: 1em; /* Ajustar el tamaño de la fuente */
+  }
+  
+  .videoCard iframe {
+      width: 100%; /* Asegurar que el iframe sea responsivo */
+      height: auto; /* Mantener la proporción del iframe */
+  }
+}
