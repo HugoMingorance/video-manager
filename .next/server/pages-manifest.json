@@ -3,8 +3,6 @@
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
   "/list/[id]": "pages/list/[id].js",
-  "/favorites": "pages/favorites.js",
   "/newVideo": "pages/newVideo.js",
-  "/": "pages/index.js",
   "/profile": "pages/profile.js"
 }
