@@ -5,6 +5,7 @@ import { db } from '../FirebaseConfig';
 import nVStyles from '../styles/NewVideo.module.css';
 import styles from '../styles/Header.module.css';
 import Header from '../components/Header';
+import { useAuth } from '../context/AuthContext'; // Importa el contexto de autenticación
 
 const NewVideo = () => {
   const [title, setTitle] = useState('');
@@ -18,13 +19,18 @@ const NewVideo = () => {
   const [isCreatingNewList, setIsCreatingNewList] = useState(false);
   const [error, setError] = useState(null);
   const router = useRouter();
-  const userId = router.query.userId;
+  const { user } = useAuth();
 
   useEffect(() => {
+    if (!user) {
+      router.push('/profile');
+      return;
+    }
+
     const fetchLists = async () => {
       try {
         // Obtener el documento del usuario en 'llistesPerUusuari'
-        const userDocRef = doc(db, 'llistesPerUusuari', userId);
+        const userDocRef = doc(db, 'llistesPerUusuari', user.uid);
         const userDocSnap = await getDoc(userDocRef);
 
         if (userDocSnap.exists()) {
@@ -49,10 +55,8 @@ const NewVideo = () => {
       }
     };
 
-    if (userId) {
-      fetchLists();
-    }
-  }, [userId]);
+    fetchLists();
+  }, [user, router]);
 
   const handleAddVideo = async () => {
     if (!title || !type || !url || (!selectedList && !isCreatingNewList)) {
@@ -76,14 +80,14 @@ const NewVideo = () => {
           description: newListDescription,
           createdAt,
           videoIds: [],
-          userId
+          userId: user.uid
         };
         
         const docRef = await addDoc(collection(db, 'lists'), newList);
         listId = docRef.id;
 
         // Actualizar el documento del usuario para incluir la nueva lista
-        const userDocRef = doc(db, 'llistesPerUusuari', userId);
+        const userDocRef = doc(db, 'llistesPerUusuari', user.uid);
         await updateDoc(userDocRef, {
           llistesIds: arrayUnion(listId)
         });
@@ -131,9 +135,13 @@ const NewVideo = () => {
     }
   };
 
+  if (!user) {
+    return null; // Renderiza null si no está autenticado para evitar parpadeos
+  }
+
   return (
     <>
-      <Header userId={userId} />
+      <Header userId={user.uid} />
       <div className={nVStyles.container}>
         <h1>Agregar Nuevo Video</h1>
         {error && <p style={{ color: 'red' }}>Error: {error}</p>}
