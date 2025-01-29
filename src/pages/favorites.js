@@ -64,6 +64,7 @@ const Favorites = () => {
           {videos.map(video => (
             <VideoCard
               key={video.id}
+              videoIdFb={video.id} // Pasar la ID del documento del video como prop
               title={video.title}
               description={video.description}
               createdAt={video.createdAt}
