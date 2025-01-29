@@ -9,32 +9,41 @@ const VideoCard = ({ videoIdFb, title, description, createdAt, videoUrl }) => {
   const [isFavorite, setIsFavorite] = useState(false); // Estado para controlar si el video es favorito
   const { user } = useAuth(); // Obtener el usuario autenticado
 
-  // Extraer el ID del video de la URL
-  const extractVideoId = (url) => {
+  // Extraer el ID del video y la plataforma de la URL
+  const extractVideoData = (url) => {
     try {
       console.log("Video URL:", url); // Debug: Mostrar la URL del video
       const urlObj = new URL(url);
       console.log("URL Object:", urlObj); // Debug: Mostrar el objeto URL
 
       let videoId = null;
+      let platform = null;
+
       if (urlObj.host === 'youtu.be') {
         // URL corta de YouTube
         videoId = urlObj.pathname.slice(1); // Obtener el ID del video del pathname
-      } else {
+        platform = 'youtube';
+      } else if (urlObj.host.includes('youtube.com')) {
         // URL normal de YouTube
         const urlParams = new URLSearchParams(urlObj.search);
         videoId = urlParams.get('v');
+        platform = 'youtube';
+      } else if (urlObj.host.includes('instagram.com')) {
+        // URL de Instagram
+        videoId = urlObj.pathname.split('/').filter(Boolean).pop();
+        platform = 'instagram';
       }
 
       console.log("Video ID:", videoId); // Debug: Mostrar el ID del video
-      return videoId;
+      console.log("Platform:", platform); // Debug: Mostrar la plataforma del video
+      return { videoId, platform };
     } catch (error) {
       console.error("Error al extraer el ID del video:", error);
-      return null;
+      return { videoId: null, platform: null };
     }
   };
 
-  const videoId = extractVideoId(videoUrl);
+  const { videoId, platform } = extractVideoData(videoUrl);
 
   // Verificar si el video es favorito cuando el componente se monta
   useEffect(() => {
@@ -118,12 +127,23 @@ const VideoCard = ({ videoIdFb, title, description, createdAt, videoUrl }) => {
     <div className={styles.videoCard} onClick={handleClick}>
       <h3>{title}</h3>
       <p>{description}</p>
-      {showVideo && videoId && (
+      {showVideo && videoId && platform === 'youtube' && (
         <iframe
           width="560"
           height="315"
           src={`https://www.youtube.com/embed/${videoId}`}
           title="YouTube video player"
+          frameBorder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowFullScreen
+        ></iframe>
+      )}
+      {showVideo && videoId && platform === 'instagram' && (
+        <iframe
+          width="560"
+          height="650"
+          src={`https://www.instagram.com/p/${videoId}/embed`}
+          title="Instagram video player"
           frameBorder="0"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowFullScreen
