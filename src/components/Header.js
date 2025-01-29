@@ -15,6 +15,12 @@ const Header = ({ userId }) => {
     router.push('/profile');
   };
 
+  const handleFavoriteClick = () => {
+    console.log('Navigating to profile page'); // Añadir un log para verificar que la función se llama
+    router.push('/favorites');
+  };
+
+
   return (
     <header className={styles.header}>
       <div className={styles.headerLeft}>
@@ -22,7 +28,7 @@ const Header = ({ userId }) => {
       </div>
       <div className={styles.headerRight}>
         <button className={styles.headerButton} onClick={handleNewClick}>Nuevo</button>
-        <button className={styles.headerButton}>Favoritos</button>
+        <button className={styles.headerButton} onClick={handleFavoriteClick}>Favoritos</button>
         <button className={styles.headerButton} onClick={handleProfileClick}>Perfil</button>
       </div>
     </header>

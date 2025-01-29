@@ -1,8 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useAuth } from '../context/AuthContext';
+import { doc, updateDoc, arrayUnion, arrayRemove, getDoc } from 'firebase/firestore';
+import { db } from '../FirebaseConfig';
 import styles from '../styles/VideoCard.module.css'; // Importa el módulo CSS
 
 const VideoCard = ({ title, description, createdAt, videoUrl }) => {
   const [showVideo, setShowVideo] = useState(false); // Estado para controlar la visibilidad del video
+  const [isFavorite, setIsFavorite] = useState(false); // Estado para controlar si el video es favorito
+  const { user } = useAuth(); // Obtener el usuario autenticado
 
   // Extraer el ID del video de la URL
   const extractVideoId = (url) => {
@@ -31,9 +36,49 @@ const VideoCard = ({ title, description, createdAt, videoUrl }) => {
 
   const videoId = extractVideoId(videoUrl);
 
+  // Verificar si el video es favorito cuando el componente se monta
+  useEffect(() => {
+    const checkIfFavorite = async () => {
+      if (user) {
+        const userDocRef = doc(db, 'favorits', user.uid);
+        const userDocSnap = await getDoc(userDocRef);
+        if (userDocSnap.exists()) {
+          const { videoIds } = userDocSnap.data();
+          setIsFavorite(videoIds.includes(videoId));
+        }
+      }
+    };
+
+    checkIfFavorite();
+  }, [user, videoId]);
+
   // Manejador de clic para mostrar/ocultar el video
   const handleClick = () => {
     setShowVideo(!showVideo);
+  };
+
+  // Manejador de clic para el botón de "corazón"
+  const handleFavoriteClick = async () => {
+    if (!user) {
+      alert('Por favor, inicia sesión para marcar videos como favoritos.');
+      return;
+    }
+
+    try {
+      const userDocRef = doc(db, 'favorits', user.uid);
+      if (isFavorite) {
+        await updateDoc(userDocRef, {
+          videoIds: arrayRemove(videoId)
+        });
+      } else {
+        await updateDoc(userDocRef, {
+          videoIds: arrayUnion(videoId)
+        });
+      }
+      setIsFavorite(!isFavorite);
+    } catch (error) {
+      console.error('Error updating favorite videos: ', error);
+    }
   };
 
   return (
@@ -51,7 +96,18 @@ const VideoCard = ({ title, description, createdAt, videoUrl }) => {
           allowFullScreen
         ></iframe>
       )}
-      <p><small>Creado el: {new Date(createdAt).toLocaleDateString()}</small></p>
+      <div className={styles.footer}>
+        <p><small>Creado el: {new Date(createdAt).toLocaleDateString()}</small></p>
+        <button
+          className={`${styles.favoriteButton} ${isFavorite ? styles.favorite : ''}`}
+          onClick={(e) => {
+            e.stopPropagation(); // Evitar que el clic en el botón de "corazón" muestre/oculte el video
+            handleFavoriteClick();
+          }}
+        >
+          {isFavorite ? '❤️' : '🤍'}
+        </button>
+      </div>
     </div>
   );
 };
